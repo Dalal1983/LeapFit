@@ -1,0 +1,11 @@
+# python requirements
+pip>=9.0
+numpy
+scipy
+opendr==0.77
+matplotlib
+scikit-image
+deepdish>=0.3
+opencv-python
+absl-py
+ipdb
