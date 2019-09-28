@@ -10,3 +10,8 @@
 7. Export OBJ from SMPL.
 - attempt to render 82 dimmensional SMPL on MagicLeap (this saves comm bandwidth)
 8. Send OBJ to MagicLeap app.
+
+# Run
+execute:
+    node server.js
+
