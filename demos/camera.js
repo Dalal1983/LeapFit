@@ -53,7 +53,7 @@ var vector_average = scores =>
   scores.reduce((a, b) => a.map((e, i) => e + b[i] / scores.length));
 
 const videoWidth = 600;
-const videoHeight = 900;
+const videoHeight = 800;
 const stats = new Stats();
 window.startHistory = false;
 let ones_array = Array.apply(null, Array(34)).map(x => 1);
@@ -542,11 +542,12 @@ function detectPoseInRealTime(video, net, canvas_id) {
           window.poseHistory["output_groundtruth"]
         );
         var score = scoreFromCosineDistance(pose_webcam, pose_groundtruth);
+        let prevScore = window.poseHistory["scores"].slice(-1)[0];
         window.poseHistory["scores"].push_with_limit(score, 30);
         var scores = window.poseHistory["scores"];
         const moving_average = average(scores);
         console.log(moving_average);
-        drawScore(score, ctx, canvas);
+        drawScore(score, prevScore, ctx, canvas);
       }
     }
     // End monitoring code for frames per second
