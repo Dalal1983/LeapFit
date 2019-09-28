@@ -120,7 +120,7 @@ export function drawScore(score, ctx, canvas) {
   ctx.fillStyle = "red";
   ctx.textAlign = "center";
   ctx.fillText(
-    "Score: " + score.toFixed(3).toString(),
+    "Score: " + score.toFixed(1).toString(),
     canvas.width / 2,
     canvas.height / 2
   );

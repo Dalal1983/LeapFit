@@ -37,10 +37,14 @@ const similarity = require("compute-cosine-similarity");
 function scoreFromCosineDistance(poseVector1, poseVector2) {
   let cosineSimilarity = similarity(poseVector1, poseVector2);
   let distance = 2 * (1 - cosineSimilarity);
-  distance = Math.sqrt(distance);
-  let max_distance = Math.sqrt(2);
-  let score = (1 - distance / max_distance) * 100;
-  return 1 - distance;
+  distance = Math.sqrt(distance); // Should range from 0-1.4
+  // 0 - 0.75 in practice
+  let floor = 0;
+  let ceiling = 0.75;
+  let score = (ceiling - distance / ceiling) * 100;
+  score = Math.min(score, 100);
+  score = Math.max(score, 0);
+  return score;
 }
 
 var average = scores =>
