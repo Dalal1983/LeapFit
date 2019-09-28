@@ -84,7 +84,7 @@ const defaultResNetStride = 32;
 const defaultResNetInputResolution = 257;
 
 const guiState = {
-  algorithm: "multi-pose",
+  algorithm: "single-pose",
   input: {
     architecture: "MobileNetV1",
     outputStride: defaultMobileNetStride,
