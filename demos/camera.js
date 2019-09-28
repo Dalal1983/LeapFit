@@ -174,7 +174,7 @@ function setupGui(cameras, net) {
     guiState.camera = cameras[0].deviceId;
   }
 
-  const gui = new dat.GUI({ width: 300 });
+  const gui = new dat.GUI({ width: 300, closed: true });
 
   let architectureController = null;
   guiState[tryResNetButtonName] = function() {
