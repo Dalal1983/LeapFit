@@ -11,13 +11,12 @@
   "dependencies": {
     "@tensorflow-models/posenet": "^2.1.1",
     "@tensorflow/tfjs": "^1.1.2",
+    "compute-cosine-similarity": "^1.0.0",
     "stats.js": "^0.17.0"
   },
   "scripts": {
-    "watch":
-      "cross-env NODE_ENV=development parcel index.html --no-hmr --open ",
-    "build":
-      "cross-env NODE_ENV=production parcel build index.html --public-url ./",
+    "watch": "cross-env NODE_ENV=development parcel index.html --no-hmr --open ",
+    "build": "cross-env NODE_ENV=production parcel build index.html --public-url ./",
     "lint": "eslint ."
   },
   "browser": {
@@ -51,5 +50,7 @@
       "sourceType": "module"
     }
   },
-  "eslintIgnore": ["dist/"]
+  "eslintIgnore": [
+    "dist/"
+  ]
 }
