@@ -29,9 +29,18 @@ import {
   updateTryResNetButtonDatGuiCss
 } from "./demo_util";
 
+// Great npm package for computing cosine similarity
+const similarity = require("compute-cosine-similarity");
+
 const videoWidth = 600;
 const videoHeight = 500;
 const stats = new Stats();
+window.startHistory = false;
+window.poseHistory = { output_webcam: [], output_groundtruth: [], scores: [] };
+
+function startHistory() {
+  window.startHistory = true;
+}
 
 /**
  * Loads a the camera to be used in the demo
@@ -478,6 +487,12 @@ function detectPoseInRealTime(video, net, canvas_id) {
       }
     });
 
+    // Get cosine similarity of poses
+    if (window.startHistory) {
+      window.poseHistory[canvas_id] = window.poseHistory[canvas_id].concat(
+        poses
+      );
+    }
     // End monitoring code for frames per second
     stats.end();
 
