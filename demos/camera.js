@@ -527,6 +527,8 @@ export async function bindPage() {
   setupFPS();
   detectPoseInRealTime(video_webcam, net, "output_webcam");
   detectPoseInRealTime(video_groundtruth, net, "output_groundtruth");
+  console.log("Playing groundtruth video...");
+  video_groundtruth.play();
 }
 
 navigator.getUserMedia =
@@ -534,4 +536,5 @@ navigator.getUserMedia =
   navigator.webkitGetUserMedia ||
   navigator.mozGetUserMedia;
 // kick off the demo
+console.log("Kicking off demo...");
 bindPage();
