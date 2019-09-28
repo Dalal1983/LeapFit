@@ -37,10 +37,14 @@ const similarity = require("compute-cosine-similarity");
 function scoreFromCosineDistance(poseVector1, poseVector2) {
   let cosineSimilarity = similarity(poseVector1, poseVector2);
   let distance = 2 * (1 - cosineSimilarity);
-  distance = Math.sqrt(distance);
-  let max_distance = Math.sqrt(2);
-  let score = (1 - distance / max_distance) * 100;
-  return 1 - distance;
+  distance = Math.sqrt(distance); // Should range from 0-1.4
+  // 0 - 0.75 in practice
+  let floor = 0;
+  let ceiling = 0.75;
+  let score = (ceiling - distance / ceiling) * 100;
+  score = Math.min(score, 100);
+  score = Math.max(score, 0);
+  return score;
 }
 
 var average = scores =>
@@ -49,7 +53,7 @@ var vector_average = scores =>
   scores.reduce((a, b) => a.map((e, i) => e + b[i] / scores.length));
 
 const videoWidth = 600;
-const videoHeight = 900;
+const videoHeight = 800;
 const stats = new Stats();
 window.startHistory = false;
 let ones_array = Array.apply(null, Array(34)).map(x => 1);
@@ -60,7 +64,7 @@ window.poseHistory = {
 };
 
 Array.prototype.push_with_limit = function(element, limit) {
-  var limit = limit || 10;
+  var limit = limit || 5;
   var length = this.length;
   if (length == limit) {
     this.shift();
@@ -170,7 +174,7 @@ function setupGui(cameras, net) {
     guiState.camera = cameras[0].deviceId;
   }
 
-  const gui = new dat.GUI({ width: 300 });
+  const gui = new dat.GUI({ width: 300, closed: true });
 
   let architectureController = null;
   guiState[tryResNetButtonName] = function() {
@@ -538,11 +542,12 @@ function detectPoseInRealTime(video, net, canvas_id) {
           window.poseHistory["output_groundtruth"]
         );
         var score = scoreFromCosineDistance(pose_webcam, pose_groundtruth);
+        let prevScore = window.poseHistory["scores"].slice(-1)[0];
         window.poseHistory["scores"].push_with_limit(score, 30);
         var scores = window.poseHistory["scores"];
         const moving_average = average(scores);
         console.log(moving_average);
-        drawScore(score, ctx, canvas);
+        drawScore(score, prevScore, ctx, canvas);
       }
     }
     // End monitoring code for frames per second
@@ -571,8 +576,6 @@ export async function bindPage() {
     multiplier: guiState.input.multiplier,
     quantBytes: guiState.input.quantBytes
   });
-  toggleLoadingUI(false, (mainDivId = "video_groundtruth"));
-  toggleLoadingUI(false);
 
   let video_webcam;
   let video_groundtruth = document.getElementById("video_groundtruth");
@@ -598,6 +601,8 @@ export async function bindPage() {
   setupFPS();
   detectPoseInRealTime(video_webcam, net, "output_webcam");
   detectPoseInRealTime(video_groundtruth, net, "output_groundtruth");
+  toggleLoadingUI(false, (mainDivId = "video_groundtruth"));
+  toggleLoadingUI(false);
   console.log("Playing groundtruth video...");
   video_groundtruth.play();
 }

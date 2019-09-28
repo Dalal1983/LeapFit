@@ -18,6 +18,8 @@ import * as posenet from "@tensorflow-models/posenet";
 import * as tf from "@tensorflow/tfjs";
 
 const l2norm = require("compute-l2norm");
+const $ = require("jquery");
+
 const color = "aqua";
 const boundingBoxColor = "red";
 const lineWidth = 2;
@@ -115,15 +117,17 @@ export function drawPoint(ctx, y, x, r, color) {
 /**
  * Draws some text on a canvas
  */
-export function drawScore(score, ctx, canvas) {
+export function drawScore(score, prevScore, ctx, canvas) {
   ctx.font = "100px Comic Sans MS";
   ctx.fillStyle = "red";
   ctx.textAlign = "center";
   ctx.fillText(
-    "Score: " + score.toFixed(3).toString(),
+    "Score: " + score.toFixed(1).toString(),
     canvas.width / 2,
     canvas.height / 2
   );
+  $("#pb").removeClass(`bar-${Math.round(prevScore)}`);
+  $("#pb").addClass(`bar-${Math.round(score)}`);
 }
 
 /**
