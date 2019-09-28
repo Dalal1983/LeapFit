@@ -10,8 +10,8 @@ const { spawn } = require('child_process')
 function runScript() {
   return spawn('python', [
     "-u",
-    path.join(__dirname, 'script.py'),
-    "--foo", "some value for foo",
+    path.join(__dirname, 'hmr/demo.py'),
+    "--img_path", "hmr/data",
   ]);
 }
 
