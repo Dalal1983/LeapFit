@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>PoseNet - Camera Feed Demo</title>
+    <style>
+      #video_wrapper {
+	display: flex;
+      }
+
+      #video_webcam_wrapper {
+	flex: 0 0 50%;
+      }
+
+      #video_groundtruth_wrapper {
+	flex: 1;
+      }
+
+      @media only screen and (max-width: 600px) {
+
+	.footer-text,
+	.dg {
+	  display: none;
+	}
+      }
+
+      /*
+       *  The following loading spinner CSS is from SpinKit project
+       *  https://github.com/tobiasahlin/SpinKit
+       */
+      .sk-spinner-pulse {
+	width: 20px;
+	height: 20px;
+	margin: auto 10px;
+	float: left;
+	background-color: #333;
+	border-radius: 100%;
+	-webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
+	animation: sk-pulseScaleOut 1s infinite ease-in-out;
+      }
+
+      @-webkit-keyframes sk-pulseScaleOut {
+	0% {
+	  -webkit-transform: scale(0);
+	  transform: scale(0);
+	}
+
+	100% {
+	  -webkit-transform: scale(1.0);
+	  transform: scale(1.0);
+	  opacity: 0;
+	}
+      }
+
+      @keyframes sk-pulseScaleOut {
+	0% {
+	  -webkit-transform: scale(0);
+	  transform: scale(0);
+	}
+
+	100% {
+	  -webkit-transform: scale(1.0);
+	  transform: scale(1.0);
+	  opacity: 0;
+	}
+      }
+
+      .spinner-text {
+	float: left;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <div id="info" style='display:none'>
+    </div>
+    <div id="loading" style='display:flex'>
+      <div class="spinner-text">
+        Loading PoseNet model...
+      </div>
+      <div class="sk-spinner sk-spinner-pulse"></div>
+    </div>
+    <div id="video_wrapper" style='display:none'>
+      <div id="video_webcam_wrapper">
+	<video id="video_webcam" playsinline style=" -moz-transform: scaleX(-1);
+						    -o-transform: scaleX(-1);
+						    -webkit-transform: scaleX(-1);
+						    transform: scaleX(-1);
+						    display: none;
+						    ">
+	</video>
+	<canvas id="output" />
+      </div>
+      <div id="video_groundtruth_wrapper" >
+	<video autoplay loop controls>
+	  <source src="assets/workout.m4v" type="video/mp4">
+	    <p>This browser does not support the video element.</p>
+	</video>
+      </div>
+    </div>
+    <script src="camera.js"></script>
+  </body>
+
+</html>
