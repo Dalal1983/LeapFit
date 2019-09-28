@@ -21,6 +21,7 @@ import Stats from "stats.js";
 import {
   drawBoundingBox,
   drawKeypoints,
+  drawScore,
   drawSkeleton,
   isMobile,
   toggleLoadingUI,
@@ -32,23 +33,51 @@ import {
 // Great npm package for computing cosine similarity
 const similarity = require("compute-cosine-similarity");
 
+function scoreFromCosineDistance(poseVector1, poseVector2) {
+  let cosineSimilarity = similarity(poseVector1, poseVector2);
+  let distance = 2 * (1 - cosineSimilarity);
+  distance = Math.sqrt(distance);
+  let max_distance = Math.sqrt(2);
+  let score = (1 - distance / max_distance) * 100;
+  return 1 - distance;
+}
+
+var average = scores =>
+  scores.reduce((prev, curr) => prev + curr) / scores.length;
+var vector_average = scores =>
+  scores.reduce((a, b) => a.map((e, i) => e + b[i] / scores.length));
+
 const videoWidth = 600;
-const videoHeight = 500;
+const videoHeight = 900;
 const stats = new Stats();
 window.startHistory = false;
-window.poseHistory = { output_webcam: [], output_groundtruth: [], scores: [] };
+let ones_array = Array.apply(null, Array(34)).map(x => 1);
+window.poseHistory = {
+  output_webcam: [ones_array],
+  output_groundtruth: [ones_array],
+  scores: [0.8]
+};
 
-var ProgressBar = require('progressbar.js');
-var bar = new ProgressBar.Path('#heart-path', {
-  easing: 'easeInOut',
+Array.prototype.push_with_limit = function(element, limit) {
+  var limit = limit || 10;
+  var length = this.length;
+  if (length == limit) {
+    this.shift();
+  }
+  this.push(element);
+};
+
+var ProgressBar = require("progressbar.js");
+var bar = new ProgressBar.Path("#heart-path", {
+  easing: "easeInOut",
   duration: 1500
 });
 
 bar.set(0.2);
 
-function startHistory() {
+window.playButtonCallback = function() {
   window.startHistory = true;
-}
+};
 
 /**
  * Loads a the camera to be used in the demo
@@ -350,10 +379,7 @@ function detectPoseInRealTime(video, net, canvas_id) {
   // original image and then just flip the keypoints' x coordinates. If instead
   // we flip the image, then correcting left-right keypoint pairs requires a
   // permutation on all the keypoints.
-  let flipPoseHorizontal = true;
-  // if (canvas_id == "output_groundtruth") {
-  //   flipPoseHorizontal = false;
-  // }
+  const flipPoseHorizontal = true;
 
   canvas.width = videoWidth;
   canvas.height = videoHeight;
@@ -477,7 +503,6 @@ function detectPoseInRealTime(video, net, canvas_id) {
       ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
       ctx.restore();
     }
-
     // For each pose (i.e. person) detected in an image, loop through the poses
     // and draw the resulting skeleton and keypoints if over certain confidence
     // scores
@@ -497,9 +522,30 @@ function detectPoseInRealTime(video, net, canvas_id) {
 
     // Get cosine similarity of poses
     if (window.startHistory) {
-      window.poseHistory[canvas_id] = window.poseHistory[canvas_id].concat(
-        poses
+      window.poseHistory[canvas.id].push_with_limit(
+        poses[0].keypoints.reduce(
+          (a, v) => [...a, v.position.x, v.position.y],
+          []
+        )
       );
+      // Compute score
+      if (canvas.id == "output_webcam") {
+        // Arbitrary choice, either one will do
+        // var pose_webcam = window.poseHistory["output_webcam"].slice(-1)[0];
+        // var pose_groundtruth = window.poseHistory["output_groundtruth"].slice(
+        //   -1
+        // )[0];
+        var pose_webcam = vector_average(window.poseHistory["output_webcam"]);
+        var pose_groundtruth = vector_average(
+          window.poseHistory["output_groundtruth"]
+        );
+        var score = scoreFromCosineDistance(pose_webcam, pose_groundtruth);
+        window.poseHistory["scores"].push_with_limit(score, 30);
+        var scores = window.poseHistory["scores"];
+        const moving_average = average(scores);
+        console.log(moving_average);
+        drawScore(score, ctx, canvas);
+      }
     }
     // End monitoring code for frames per second
     stats.end();
@@ -509,7 +555,6 @@ function detectPoseInRealTime(video, net, canvas_id) {
 
     requestAnimationFrame(poseDetectionFrame);
   }
-
   poseDetectionFrame();
 }
 
