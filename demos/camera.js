@@ -38,6 +38,14 @@ const stats = new Stats();
 window.startHistory = false;
 window.poseHistory = { output_webcam: [], output_groundtruth: [], scores: [] };
 
+var ProgressBar = require('progressbar.js');
+var bar = new ProgressBar.Path('#heart-path', {
+  easing: 'easeInOut',
+  duration: 1500
+});
+
+bar.set(0.2);
+
 function startHistory() {
   window.startHistory = true;
 }
@@ -343,9 +351,9 @@ function detectPoseInRealTime(video, net, canvas_id) {
   // we flip the image, then correcting left-right keypoint pairs requires a
   // permutation on all the keypoints.
   let flipPoseHorizontal = true;
-  if (canvas_id == "output_groundtruth") {
-    flipPoseHorizontal = false;
-  }
+  // if (canvas_id == "output_groundtruth") {
+  //   flipPoseHorizontal = false;
+  // }
 
   canvas.width = videoWidth;
   canvas.height = videoHeight;
@@ -496,6 +504,9 @@ function detectPoseInRealTime(video, net, canvas_id) {
     // End monitoring code for frames per second
     stats.end();
 
+    // Update progress bar
+    bar.animate(0.8);
+
     requestAnimationFrame(poseDetectionFrame);
   }
 
@@ -537,6 +548,8 @@ export async function bindPage() {
     info.style.display = "block";
     throw e;
   }
+
+  // bar.animate(0.5);  // Number from 0.0 to 1.0
 
   setupGui([], net);
   setupFPS();
