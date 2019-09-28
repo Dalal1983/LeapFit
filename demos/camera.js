@@ -334,6 +334,9 @@ function detectPoseInRealTime(video, net, canvas_id) {
   // we flip the image, then correcting left-right keypoint pairs requires a
   // permutation on all the keypoints.
   const flipPoseHorizontal = true;
+  if (canvas_id == "output_groundtruth"){
+    flipPoseHorizontal = false;
+  }
 
   canvas.width = videoWidth;
   canvas.height = videoHeight;
