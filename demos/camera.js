@@ -64,7 +64,7 @@ window.poseHistory = {
 };
 
 Array.prototype.push_with_limit = function(element, limit) {
-  var limit = limit || 10;
+  var limit = limit || 5;
   var length = this.length;
   if (length == limit) {
     this.shift();
