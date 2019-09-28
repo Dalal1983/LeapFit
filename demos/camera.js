@@ -37,14 +37,16 @@ const stats = new Stats();
  * Loads a the camera to be used in the demo
  *
  */
-async function setupCamera() {
+async function setupCamera(video_id) {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     throw new Error(
       "Browser API navigator.mediaDevices.getUserMedia not available"
     );
   }
 
-  const video = document.getElementById("video");
+  const video = document.getElementById(video_id);
+  console.log("Loading video " + video_id + "...");
+  console.log(video);
   video.width = videoWidth;
   video.height = videoHeight;
 
@@ -66,8 +68,8 @@ async function setupCamera() {
   });
 }
 
-async function loadVideo() {
-  const video = await setupCamera();
+async function loadVideo(video_id) {
+  const video = await setupCamera(video_id);
   video.play();
 
   return video;
@@ -323,8 +325,8 @@ function setupFPS() {
  * happens. This function loops with a requestAnimationFrame method.
  */
 // TODO: accept element id as parameter
-function detectPoseInRealTime(video, net) {
-  const canvas = document.getElementById("output");
+function detectPoseInRealTime(video, net, canvas_id) {
+  const canvas = document.getElementById(canvas_id);
   const ctx = canvas.getContext("2d");
 
   // since images are being fed from a webcam, we want to feed in the
@@ -488,6 +490,8 @@ function detectPoseInRealTime(video, net) {
  */
 export async function bindPage() {
   toggleLoadingUI(true);
+  let mainDivId;
+  toggleLoadingUI(true, (mainDivId = "video_groundtruth"));
   const net = await posenet.load({
     architecture: guiState.input.architecture,
     outputStride: guiState.input.outputStride,
@@ -495,12 +499,18 @@ export async function bindPage() {
     multiplier: guiState.input.multiplier,
     quantBytes: guiState.input.quantBytes
   });
+  toggleLoadingUI(false, (mainDivId = "video_groundtruth"));
   toggleLoadingUI(false);
 
-  let video;
+  let video_webcam;
+  let video_groundtruth = document.getElementById("video_groundtruth");
+  console.log("Loading groundtruth video...");
+  console.log(video_groundtruth);
+  video_groundtruth.width = videoWidth;
+  video_groundtruth.height = videoHeight;
 
   try {
-    video = await loadVideo();
+    video_webcam = await loadVideo("video_webcam");
   } catch (e) {
     let info = document.getElementById("info");
     info.textContent =
@@ -512,7 +522,8 @@ export async function bindPage() {
 
   setupGui([], net);
   setupFPS();
-  detectPoseInRealTime(video, net);
+  detectPoseInRealTime(video_webcam, net, "output_webcam");
+  detectPoseInRealTime(video_groundtruth, net, "output_groundtruth");
 }
 
 navigator.getUserMedia =
