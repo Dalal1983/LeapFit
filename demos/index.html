@@ -2,7 +2,9 @@
 <html>
 
   <head>
-    <title>PoseNet - Camera Feed Demo</title>
+    <title>Whoo</title>
+    <link rel = "stylesheet"
+	  href = "sass/progressbar.scss" />
     <style>
       #video_wrapper {
 	display: flex;
@@ -68,11 +70,11 @@
       .spinner-text {
 	float: left;
       }
-			#container {
-  margin: 20px;
-  width: 200px;
-  height: 200px;
-}
+      #container {
+	margin: 20px;
+	width: 200px;
+	height: 200px;
+      }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
@@ -97,6 +99,27 @@
 	</video>
 	<canvas id="output_webcam" />
       </div>
+      <div class="container">
+        <div id='chartpb' class="chart"  style='transform: rotate(-90deg)'>
+          <div id='pb' class="bar">
+            <div class="face top">
+              <div class="growing-bar"></div>
+            </div>
+            <div class="face side-0">
+              <div class="growing-bar"></div>
+            </div>
+            <div class="face floor">
+              <div class="growing-bar"></div>
+            </div>
+            <div class="face side-a"></div>
+            <div class="face side-b"></div>
+            <div class="face side-1">
+              <div class="growing-bar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div id="video_groundtruth_wrapper" >
 	<video id="video_groundtruth" autoplay loop controls playsinline>
 	  <source src="assets/wings.mp4" type="video/mp4">
