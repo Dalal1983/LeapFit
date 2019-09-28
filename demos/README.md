@@ -1,10 +1,13 @@
 # PoseNet Demo
 UI inspired by [Kinect Dance Central](https://www.youtube.com/watch?v=9DEkMxlDnI8).
 
-## Contents
 
-### Demo 1: Camera
+## Parameters
+PoseNet runs with either a single-pose or multi-pose detection algorithm. The single person pose detector is faster and more accurate but requires only one subject present in the image.
 
+The output stride and input resolution have the largest effects on accuracy/speed. A higher output stride results in lower accuracy but higher speed. A higher image scale factor results in higher accuracy but lower speed.
+
+## Demo 1: Camera
 The camera demo shows how to estimate poses in real-time from a webcam video stream.
 
 <img src="https://raw.githubusercontent.com/tensorflow/tfjs-models/master/posenet/demos/camera.gif" alt="cameraDemo" style="width: 600px;"/>
