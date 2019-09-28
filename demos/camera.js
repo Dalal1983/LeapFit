@@ -576,8 +576,6 @@ export async function bindPage() {
     multiplier: guiState.input.multiplier,
     quantBytes: guiState.input.quantBytes
   });
-  toggleLoadingUI(false, (mainDivId = "video_groundtruth"));
-  toggleLoadingUI(false);
 
   let video_webcam;
   let video_groundtruth = document.getElementById("video_groundtruth");
@@ -603,6 +601,8 @@ export async function bindPage() {
   setupFPS();
   detectPoseInRealTime(video_webcam, net, "output_webcam");
   detectPoseInRealTime(video_groundtruth, net, "output_groundtruth");
+  toggleLoadingUI(false, (mainDivId = "video_groundtruth"));
+  toggleLoadingUI(false);
   console.log("Playing groundtruth video...");
   video_groundtruth.play();
 }
