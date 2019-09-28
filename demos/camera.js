@@ -315,13 +315,14 @@ function setupGui(cameras, net) {
  */
 function setupFPS() {
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-  document.getElementById("main").appendChild(stats.dom);
+  document.getElementById("video_wrapper").appendChild(stats.dom);
 }
 
 /**
  * Feeds an image to posenet to estimate poses - this is where the magic
  * happens. This function loops with a requestAnimationFrame method.
  */
+// TODO: accept element id as parameter
 function detectPoseInRealTime(video, net) {
   const canvas = document.getElementById("output");
   const ctx = canvas.getContext("2d");
