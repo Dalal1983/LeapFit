@@ -8,7 +8,5 @@
 6. Get started with [MagicLeap tutorial(s) on slide 13](https://docs.google.com/presentation/d/1SUMgqLEmPsc2FfTeBYtHR2lm3MeBbj3jeMxxqhWAnXc/edit?usp=drivesdk
 )
 7. Export OBJ from SMPL.
-* attempt to render 82 dimmensional SMPL on MagicLeap (this saves comm bandwidth)
+- attempt to render 82 dimmensional SMPL on MagicLeap (this saves comm bandwidth)
 8. Send OBJ to MagicLeap app.
-
-
