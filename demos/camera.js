@@ -19,6 +19,7 @@ import dat from "dat.gui";
 import Stats from "stats.js";
 
 import {
+  cropScaleAndNormalizeKeypoints,
   drawBoundingBox,
   drawKeypoints,
   drawScore,
@@ -523,10 +524,7 @@ function detectPoseInRealTime(video, net, canvas_id) {
     // Get cosine similarity of poses
     if (window.startHistory) {
       window.poseHistory[canvas.id].push_with_limit(
-        poses[0].keypoints.reduce(
-          (a, v) => [...a, v.position.x, v.position.y],
-          []
-        )
+        cropScaleAndNormalizeKeypoints(poses[0].keypoints)
       );
       // Compute score
       if (canvas.id == "output_webcam") {

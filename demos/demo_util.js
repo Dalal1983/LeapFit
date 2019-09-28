@@ -17,6 +17,7 @@
 import * as posenet from "@tensorflow-models/posenet";
 import * as tf from "@tensorflow/tfjs";
 
+const l2norm = require("compute-l2norm");
 const color = "aqua";
 const boundingBoxColor = "red";
 const lineWidth = 2;
@@ -76,6 +77,30 @@ export function toggleLoadingUI(
   }
 }
 
+function cropAndScaleKeypoint(keypoint, minX, minY, maxX, maxY) {
+  let x = (keypoint.position.x - minX) / (maxX - minX);
+  let y = (keypoint.position.y - minY) / (maxY - minY);
+  return [x, y];
+}
+
+export function cropScaleAndNormalizeKeypoints(keypoints) {
+  const boundingBox = posenet.getBoundingBox(keypoints);
+  keypoints = keypoints.map(x =>
+    cropAndScaleKeypoint(
+      x,
+      boundingBox.minX,
+      boundingBox.minY,
+      boundingBox.maxX,
+      boundingBox.maxY
+    )
+  );
+  // Flatten list of 2-tuples
+  keypoints = keypoints.reduce((a, v) => [...a, v[0], v[1]], []);
+  let norm = l2norm(keypoints);
+  keypoints = keypoints.map(elem => elem / norm);
+  return keypoints;
+}
+
 function toTuple({ y, x }) {
   return [y, x];
 }
@@ -90,12 +115,12 @@ export function drawPoint(ctx, y, x, r, color) {
 /**
  * Draws some text on a canvas
  */
-export function drawScore(text, ctx, canvas) {
+export function drawScore(score, ctx, canvas) {
   ctx.font = "100px Comic Sans MS";
   ctx.fillStyle = "red";
   ctx.textAlign = "center";
   ctx.fillText(
-    "Score: " + text.toString(),
+    "Score: " + score.toFixed(3).toString(),
     canvas.width / 2,
     canvas.height / 2
   );
