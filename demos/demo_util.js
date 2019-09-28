@@ -88,6 +88,20 @@ export function drawPoint(ctx, y, x, r, color) {
 }
 
 /**
+ * Draws some text on a canvas
+ */
+export function drawScore(text, ctx, canvas) {
+  ctx.font = "100px Comic Sans MS";
+  ctx.fillStyle = "red";
+  ctx.textAlign = "center";
+  ctx.fillText(
+    "Score: " + text.toString(),
+    canvas.width / 2,
+    canvas.height / 2
+  );
+}
+
+/**
  * Draws a line on a canvas, i.e. a joint
  */
 export function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
