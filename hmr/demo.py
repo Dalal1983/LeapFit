@@ -143,7 +143,7 @@ if __name__ == '__main__':
     config = flags.FLAGS
     config(sys.argv)
     i = 0
-    for file in os.listdir(config.img_path):
+    for file in sorted(os.listdir(config.img_path)):
         ext = os.path.splitext(file)[-1].lower()
         if ext in extensions:
             # Using pre-trained model, change this to use your own.
