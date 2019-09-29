@@ -34,15 +34,27 @@ import {
 
 // Great npm package for computing cosine similarity
 const similarity = require("compute-cosine-similarity");
+// Serving hmr process from WebApp
+const path = require("path");
+const { spawn, exec } = require("child_process");
+
+function runScript() {
+  return spawn("python", [
+    "-u",
+    path.join(__dirname, "hmr/demo.py"),
+    "--img_path",
+    "hmr/data"
+  ]);
+}
 
 function scoreFromCosineDistance(poseVector1, poseVector2) {
   let cosineSimilarity = similarity(poseVector1, poseVector2);
   let distance = 2 * (1 - cosineSimilarity);
   distance = Math.sqrt(distance); // Should range from 0-1.4
   // 0 - 0.75 in practice
-  let floor = 0;
+  let floor = 0.1;
   let ceiling = 0.75;
-  let score = (ceiling - distance / ceiling) * 100;
+  let score = (ceiling - distance) / ceiling * 100;
   score = Math.min(score, 100);
   score = Math.max(score, 0);
   return score;
@@ -65,7 +77,7 @@ window.poseHistory = {
 };
 
 Array.prototype.push_with_limit = function(element, limit) {
-  var limit = limit || 10;
+  var limit = limit || 15;
   var length = this.length;
   if (length == limit) {
     this.shift();
@@ -130,7 +142,7 @@ async function loadVideo(video_id) {
 
 const defaultQuantBytes = 2;
 
-const defaultMobileNetMultiplier = isMobile() ? 0.5 : 0.5;
+const defaultMobileNetMultiplier = isMobile() ? 0.75 : 0.5;
 const defaultMobileNetStride = 16;
 const defaultMobileNetInputResolution = 513;
 
@@ -519,14 +531,20 @@ function detectPoseInRealTime(video, net, canvas_id) {
       guiState.output.saveFrames++;
       let modulo =
         guiState.output.saveFrames % guiState.output.saveEveryNFrames;
-      if (modulo == 0 || modulo == 1) {
+      if ((modulo == 0 || modulo == 1) && canvas.id == "output_webcam") {
         canvas.toBlob(function(blob) {
           saveAs(blob, `${canvas.id}_${guiState.output.saveFrames}.png`);
         });
       }
-      if (guiState.output.saveFrames > guiState.output.saveFramesMax) {
+      // if (guiState.output.saveFrames > guiState.output.saveFramesMax) {
+      if (guiState.output.saveFrames > 5) {
         guiState.output.saveFrames = 0; // Reset.
         // TODO: trigger demo.py
+        function puts(error, stdout, stderr) {
+          sys.puts(stdout);
+        }
+        runScript();
+        exec("bash top_level_script.sh ", puts);
       }
     }
     // For each pose (i.e. person) detected in an image, loop through the poses
@@ -567,7 +585,6 @@ function detectPoseInRealTime(video, net, canvas_id) {
         window.poseHistory["scores"].push_with_limit(score, 30);
         var scores = window.poseHistory["scores"];
         const moving_average = average(scores);
-        console.log(moving_average);
         drawScore(score, prevScore, ctx, canvas);
       }
     }
