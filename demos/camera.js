@@ -17,6 +17,7 @@
 import * as posenet from "@tensorflow-models/posenet";
 import dat from "dat.gui";
 import Stats from "stats.js";
+import { saveAs } from "file-saver";
 
 import {
   cropScaleAndNormalizeKeypoints,
@@ -82,6 +83,7 @@ bar.set(0.2);
 
 window.playButtonCallback = function() {
   window.startHistory = true;
+  guiState.output.saveFrames++;
 };
 
 /**
@@ -128,7 +130,7 @@ async function loadVideo(video_id) {
 
 const defaultQuantBytes = 2;
 
-const defaultMobileNetMultiplier = isMobile() ? 0.5 : 0.75;
+const defaultMobileNetMultiplier = isMobile() ? 0.5 : 0.5;
 const defaultMobileNetStride = 16;
 const defaultMobileNetInputResolution = 513;
 
@@ -156,6 +158,9 @@ const guiState = {
     nmsRadius: 30.0
   },
   output: {
+    saveFrames: 0,
+    saveFramesMax: 200,
+    saveEveryNFrames: 20,
     showVideo: true,
     showSkeleton: true,
     showPoints: true,
@@ -506,7 +511,23 @@ function detectPoseInRealTime(video, net, canvas_id) {
       ctx.scale(-1, 1);
       ctx.translate(-videoWidth, 0);
       ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+
       ctx.restore();
+    }
+    // Before drawing annotations, save frame.
+    if (guiState.output.saveFrames > 0) {
+      guiState.output.saveFrames++;
+      let modulo =
+        guiState.output.saveFrames % guiState.output.saveEveryNFrames;
+      if (modulo == 0 || modulo == 1) {
+        canvas.toBlob(function(blob) {
+          saveAs(blob, `${canvas.id}_${guiState.output.saveFrames}.png`);
+        });
+      }
+      if (guiState.output.saveFrames > guiState.output.saveFramesMax) {
+        guiState.output.saveFrames = 0; // Reset.
+        // TODO: trigger demo.py
+      }
     }
     // For each pose (i.e. person) detected in an image, loop through the poses
     // and draw the resulting skeleton and keypoints if over certain confidence

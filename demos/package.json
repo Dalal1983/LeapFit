@@ -12,6 +12,7 @@
     "@tensorflow-models/posenet": "^2.1.1",
     "@tensorflow/tfjs": "^1.1.2",
     "compute-cosine-similarity": "^1.0.0",
+    "file-saver": "^2.0.2",
     "jquery": "^3.4.1",
     "node-sass": "^4.12.0",
     "progressbar.js": "^1.0.1",
