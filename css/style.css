@@ -20,6 +20,20 @@ a {
     clear: both;
 }
 
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.label {
+    margin: 20px;
+    font-size: 25px;
+    color: white;
+}
+
 header {
     height: 60px;
     background-color: rgba(12, 80, 57, 0.8);
@@ -61,7 +75,7 @@ nav {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-#rightSection {
+#rightSection, #leftSection {
     transform: rotate(180deg);
 }
 

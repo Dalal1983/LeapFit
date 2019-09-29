@@ -1,10 +1,14 @@
 // $(document).ready(function () {
-    setTimeout(function(){ load3DModel('https://googlewebcomponents.github.io/model-viewer/examples/assets/RobotExpressive.glb', 'right') }, 3000);
-    setTimeout(function(){ load3DModel('./3dmodels/Astronaut.glb', 'left') }, 3000);
+let modelNo = 0;
+setInterval(function () {
+    load3DModel('./mixedrealitymodels/' + modelNo + '.glb', 'left');
+    load3DModel('./mixedrealitymodelscoach/' + modelNo + '.glb', 'right');
+    modelNo = (modelNo == 10) ? 0 : modelNo + 1;
+}, 1000);
 
-    // load3DModel('https://googlewebcomponents.github.io/model-viewer/examples/assets/RobotExpressive.glb');
+// load3DModel('https://googlewebcomponents.github.io/model-viewer/examples/assets/RobotExpressive.glb');
 // });
 
-function load3DModel(newModelURL, modelSide = 'left') {
+async function load3DModel(newModelURL, modelSide = 'left') {
     $('#' + modelSide + 'Section').attr('src', newModelURL);
 }
