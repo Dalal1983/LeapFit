@@ -118,11 +118,17 @@ export function drawPoint(ctx, y, x, r, color) {
  * Draws some text on a canvas
  */
 export function drawScore(score, prevScore, ctx, canvas) {
-  ctx.font = "100px Comic Sans MS";
-  ctx.fillStyle = "red";
+  ctx.font = "100px Verdana";
+  // Create gradient
+  var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  gradient.addColorStop("0", "magenta");
+  gradient.addColorStop("0.5", "blue");
+  gradient.addColorStop("1.0", "red");
+  // Fill with gradient
+  ctx.fillStyle = gradient;
   ctx.textAlign = "center";
   ctx.fillText(
-    "Score: " + score.toFixed(1).toString(),
+    "score: " + score.toFixed(1).toString(),
     canvas.width / 2,
     canvas.height / 2
   );
