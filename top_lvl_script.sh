@@ -5,11 +5,11 @@ git pull
 rm -r mixedrealitymodels/*
 git rm -r mixedrealitymodels/*
 echo "removed mixedrealitymodels"
-python hmr/demo.py --img_path demo-sequences/ --glb_path mixedrealitymodels
+python hmr/demo.py --img_path demo-sequences/you/ --glb_path mixedrealitymodels
 echo "ran hmr"
 git add mixedrealitymodels/*
-rm -r demo-sequences/*.png
-git rm -r demo-sequences/*.png
+rm -r demo-sequences/you/*.png
+git rm -r demo-sequences/you/*.png
 echo "pushing to website"
 git push
 
