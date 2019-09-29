@@ -1,8 +1,9 @@
 #!/bin/bash
 
 git pull
-python hmr/demo.py --img_path demo-sequences --glb_path mixedrealitymodels/you.glb
-git add mixedrealitymodels/you.glb
-git rm -r demo-sequences/*.png
+git rm -r mixedrealitymodels/*
+python hmr/demo.py --img_path demo-sequences --glb_path mixedrealitymodels
+git add mixedrealitymodels/*
+git rm -r demo-sequences/you/*.png
 git push
 
