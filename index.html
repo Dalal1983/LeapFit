@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MIXED REALITY HEALTHCOACH CHALLENGE</title>
+    <title>Do It Right</title>
     <link rel="stylesheet" href="./css/style.css">
     <script src="../libs/jquery-3.4.1.min.js"></script>
-    <!-- Import the component -->
+    <!-- Import the component for Model-Viewer [For Web Browsers] -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
     <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+    <!-- Import the component for Model-Viewer [For Web Browsers] -->
+    <script src="https://unpkg.com/@magicleap/prismatic"></script>
 </head>
-
 <body>
     <header>
         <p class="appTitle">Mixed Reality App</p>
@@ -23,7 +23,7 @@
 
     </div>
     <div class="screen">
-        <model-viewer magic-leap class="singleScreen" id="rightSection" src="./3dmodels/coco.glb"
+        <model-viewer magic-leap class="singleScreen" id="rightSection" src="./3dmodels/file.glb"
             alt="A 3D model of an astronaut" camera-controls background-color="#455A64"></model-viewer>
         <model-viewer magic-leap autoplay animation-name="Running" magic-leap class="singleScreen" id="leftSection"
             src="./3dmodels/RobotExpressive.glb" alt="A 3D model of an astronaut" camera-controls
