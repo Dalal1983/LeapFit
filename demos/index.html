@@ -82,7 +82,8 @@
 	height: 200px;
       }
     </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="https://unpkg.com/@magicleap/prismatic"></script>
   </head>
 
   <body>
@@ -145,7 +146,10 @@
 			</svg>
 		</div>
 
-    <script src="camera.js"></script>
+		<script src="camera.js"></script>
+		<ml-model id="ballonsModel" src="../model.gltf" alt-img="smile.jpg" extractable="true" extracted-scale="5" z-offset="500px"
+			prism-rotation="0 -2.35619 0" environment-lighting="color-intensity: 1;">
+		</ml-model>
   </body>
 
 </html>
