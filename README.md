@@ -13,5 +13,15 @@
 
 # Run
 execute:
+
     node server.js
 
+# Dependencies
+
+for saving the SMPL models into .glb format
+
+    pip install trimesh
+    
+for creating the SMPL (minor modifications made to the code, perhaps we should fork this directory)
+
+    git clone https://github.com/akanazawa/hmr.git
