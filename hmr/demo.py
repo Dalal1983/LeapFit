@@ -34,6 +34,7 @@ import src.config
 from src.RunModel import RunModel
 
 flags.DEFINE_string('img_path', 'data/im1963.jpg', 'Image to run')
+flags.DEFINE_string('glb_path', '../mixedrealitymodels/you.glb', 'Animated GLB file to write to')
 flags.DEFINE_string(
     'json_path', None,
     'If specified, uses the openpose output to crop the image.')
@@ -141,15 +142,15 @@ def main(img_path, json_path=None):
 if __name__ == '__main__':
     config = flags.FLAGS
     config(sys.argv)
+    i = 0
     for file in os.listdir(config.img_path):
         ext = os.path.splitext(file)[-1].lower()
         if ext in extensions:
             # Using pre-trained model, change this to use your own.
             tf.reset_default_graph()
             config.load_path = src.config.PRETRAINED_MODEL
-
             config.batch_size = 1
-    
             renderer = vis_util.SMPLRenderer(glb_path=os.path.join(os.path.join(config.img_path,"glbs"),file),face_path=config.smpl_face_path)
-
             main(os.path.join(config.img_path,file), config.json_path)
+            renderer.trimesh.export(os.path.join(config.glb_path, str(i) + ".glb"))
+            i += 1
