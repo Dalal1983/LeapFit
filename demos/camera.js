@@ -531,20 +531,19 @@ function detectPoseInRealTime(video, net, canvas_id) {
       guiState.output.saveFrames++;
       let modulo =
         guiState.output.saveFrames % guiState.output.saveEveryNFrames;
-      if ((modulo == 0 || modulo == 1) && canvas.id == "output_webcam") {
-        canvas.toBlob(function(blob) {
-          saveAs(blob, `${canvas.id}_${guiState.output.saveFrames}.png`);
-        });
-      }
-      // if (guiState.output.saveFrames > guiState.output.saveFramesMax) {
-      if (guiState.output.saveFrames > 5) {
+      // if ((modulo == 0 || modulo == 1) && canvas.id == "output_webcam") {
+      //   canvas.toBlob(function(blob) {
+      //     saveAs(blob, `${canvas.id}_${guiState.output.saveFrames}.png`);
+      //   });
+      // }
+      if (guiState.output.saveFrames > guiState.output.saveFramesMax) {
         guiState.output.saveFrames = 0; // Reset.
         // TODO: trigger demo.py
-        function puts(error, stdout, stderr) {
-          sys.puts(stdout);
-        }
-        runScript();
-        exec("bash top_level_script.sh ", puts);
+        // function puts(error, stdout, stderr) {
+        // sys.puts(stdout);
+        // }
+        // runScript();
+        // exec("bash top_level_script.sh ", puts);
       }
     }
     // For each pose (i.e. person) detected in an image, loop through the poses

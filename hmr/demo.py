@@ -150,7 +150,11 @@ if __name__ == '__main__':
             tf.reset_default_graph()
             config.load_path = src.config.PRETRAINED_MODEL
             config.batch_size = 1
-            renderer = vis_util.SMPLRenderer(glb_path=os.path.join(os.path.join(config.img_path,"glbs"),file),face_path=config.smpl_face_path)
-            main(os.path.join(config.img_path,file), config.json_path)
-            renderer.trimesh.export(os.path.join(config.glb_path, str(i) + ".glb"))
+            renderer = vis_util.SMPLRenderer(glb_path=os.path.join(
+                config.glb_path, file),
+                                             face_path=config.smpl_face_path)
+            main(os.path.join(config.img_path, file), config.json_path)
+            renderer.trimesh.export(
+                os.path.join(config.glb_path,
+                             str(i) + ".glb"))
             i += 1
